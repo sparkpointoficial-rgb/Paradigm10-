@@ -4,224 +4,289 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Paradigm 10X</title>
-
 <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
 
 <style>
 body{
-    margin:0;
-    font-family:Arial, sans-serif;
-    background:#000;
-    color:#fff;
-    text-align:center;
+margin:0;
+font-family:Arial, sans-serif;
+background:#000;
+color:#fff;
+text-align:center;
 }
 
 header{
-    padding:30px 20px;
+padding:25px;
 }
 
 .logo{
-    font-size:40px;
-    font-weight:bold;
-    color:#FFD700;
+font-size:38px;
+font-weight:bold;
+color:#FFD700;
 }
 
-.sub{
-    color:#aaa;
-    margin-top:10px;
+.lang-switch{
+position:absolute;
+top:20px;
+right:20px;
+cursor:pointer;
+background:#FFD700;
+color:#000;
+padding:5px 10px;
+border-radius:6px;
+font-weight:bold;
 }
 
 .wallet-btn{
-    background:#FFD700;
-    color:#000;
-    padding:12px 20px;
-    border:none;
-    border-radius:8px;
-    font-weight:bold;
-    cursor:pointer;
-    margin-top:15px;
+background:#FFD700;
+color:#000;
+padding:10px 20px;
+border:none;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+margin-top:10px;
 }
 
 .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    gap:20px;
-    padding:20px;
-    max-width:1100px;
-    margin:auto;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+padding:20px;
+max-width:1100px;
+margin:auto;
 }
 
 .card{
-    background:#111;
-    border-radius:15px;
-    padding:25px;
-    box-shadow:0 0 15px rgba(255,215,0,0.2);
+background:#111;
+border-radius:15px;
+padding:25px;
+box-shadow:0 0 15px rgba(255,215,0,0.2);
 }
 
 .card h2{
-    color:#FFD700;
+color:#FFD700;
 }
 
 .price{
-    font-size:28px;
-    margin:15px 0;
-    color:#fff;
+font-size:26px;
+margin:10px 0;
 }
 
 .btn{
-    width:100%;
-    padding:12px;
-    margin-top:10px;
-    border:none;
-    border-radius:8px;
-    font-weight:bold;
-    cursor:pointer;
+width:100%;
+padding:10px;
+margin-top:10px;
+border:none;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
 }
 
-.btn-yellow{
-    background:#FFD700;
-    color:#000;
-}
-
-.btn-green{
-    background:#00c853;
-    color:#000;
-}
-
-.btn-red{
-    background:#d50000;
-    color:#fff;
-}
+.btn-yellow{background:#FFD700;color:#000;}
+.btn-green{background:#00c853;color:#000;}
+.btn-red{background:#d50000;color:#fff;}
 
 .btn:disabled{
-    background:#333;
-    color:#777;
-    cursor:not-allowed;
+background:#333;
+color:#777;
+cursor:not-allowed;
 }
 
 .rules{
-    max-width:900px;
-    margin:40px auto;
-    background:#111;
-    padding:25px;
-    border-radius:15px;
-    text-align:left;
-}
-
-.rules h3{
-    color:#FFD700;
+max-width:900px;
+margin:40px auto;
+background:#111;
+padding:25px;
+border-radius:15px;
+text-align:left;
 }
 
 .checkbox-area{
-    margin-top:20px;
-    padding:15px;
-    border:1px solid #FFD700;
-    border-radius:10px;
+margin-top:20px;
+padding:15px;
+border:1px solid #FFD700;
+border-radius:10px;
 }
 
 .video-btn{
-    background:#d50000;
-    color:#fff;
-    padding:12px 20px;
-    border:none;
-    border-radius:8px;
-    font-weight:bold;
-    cursor:pointer;
-    margin-top:20px;
+background:#d50000;
+color:#fff;
+padding:12px 20px;
+border:none;
+border-radius:8px;
+font-weight:bold;
+cursor:pointer;
+margin-top:20px;
+}
+
+.wallets{
+margin-top:30px;
+}
+
+.wallets a{
+display:inline-block;
+margin:10px;
+background:#FFD700;
+color:#000;
+padding:10px 15px;
+border-radius:8px;
+text-decoration:none;
+font-weight:bold;
 }
 
 footer{
-    margin:40px 0;
-    color:#777;
+margin:40px 0;
+color:#777;
+}
+
+/* Modal */
+.modal{
+display:none;
+position:fixed;
+z-index:10;
+left:0;top:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+}
+
+.modal-content{
+background:#111;
+margin:10% auto;
+padding:20px;
+width:90%;
+max-width:500px;
+border-radius:15px;
+}
+
+.close{
+color:#FFD700;
+float:right;
+font-size:22px;
+cursor:pointer;
 }
 </style>
 </head>
+
 <body>
 
+<div class="lang-switch" onclick="toggleLang()">RU / EN</div>
+
 <header>
-    <div class="logo">PARADIGM 10X</div>
-    <div class="sub">Web3 Matrix Platform</div>
-    <button class="wallet-btn" onclick="connectWallet()">Подключить кошелек</button>
-    <div id="walletAddress"></div>
+<div class="logo">PARADIGM 10X</div>
+<button class="wallet-btn" onclick="connectWallet()">Подключить кошелек</button>
+<div id="walletAddress"></div>
 </header>
 
 <div class="grid">
 
-    <div class="card">
-        <h2>Flash</h2>
-        <div class="price">50$</div>
-        <button class="btn btn-yellow">Посмотреть</button>
-        <button class="btn btn-green buyBtn" disabled>Купить</button>
-    </div>
+<div class="card">
+<h2>🚀 Flash</h2>
+<div class="price">50$</div>
+<button class="btn btn-yellow" onclick="openDesc('flash')">Посмотреть</button>
+<button class="btn btn-green buyBtn" disabled>Купить</button>
+</div>
 
-    <div class="card">
-        <h2>Rapid</h2>
-        <div class="price">100$</div>
-        <button class="btn btn-yellow">Посмотреть</button>
-        <button class="btn btn-green buyBtn" disabled>Купить</button>
-    </div>
+<div class="card">
+<h2>💰 Rapid</h2>
+<div class="price">100$</div>
+<button class="btn btn-yellow" onclick="openDesc('rapid')">Посмотреть</button>
+<button class="btn btn-green buyBtn" disabled>Купить</button>
+</div>
 
-    <div class="card">
-        <h2>Validator</h2>
-        <div class="price">50$</div>
-        <button class="btn btn-yellow">Посмотреть</button>
-        <button class="btn btn-green buyBtn" disabled>Купить</button>
-    </div>
+<div class="card">
+<h2>🛡 Validator</h2>
+<div class="price">50$</div>
+<button class="btn btn-yellow" onclick="openDesc('validator')">Посмотреть</button>
+<button class="btn btn-green buyBtn" disabled>Купить</button>
+</div>
 
-    <div class="card">
-        <h2>Genesis</h2>
-        <div class="price">100$</div>
-        <button class="btn btn-yellow">Посмотреть</button>
-        <button class="btn btn-green buyBtn" disabled>Купить</button>
-    </div>
+<div class="card">
+<h2>👑 Genesis</h2>
+<div class="price">100$</div>
+<button class="btn btn-yellow" onclick="openDesc('genesis')">Посмотреть</button>
+<button class="btn btn-green buyBtn" disabled>Купить</button>
+</div>
 
 </div>
 
 <div class="rules">
-    <h3>Правила участия</h3>
-    <p>
-    • Все процессы работают на смарт-контракте.<br>
-    • Ваша задача — пригласить 2 активных участников.<br>
-    • Отсутствие гарантий дохода.<br>
-    • Вход является добровольным.
-    </p>
+<h3>Правила участия</h3>
+<p>
+• Все процессы работают на автопилоте.<br>
+• Необходимо 2 активных участника.<br>
+• Доход зависит от активности.<br>
+• Вход добровольный.
+</p>
 
-    <button class="video-btn" onclick="openVideo()">Видео инструкция регистрации</button>
+<button class="video-btn" onclick="openVideo()">📺 Видео инструкция регистрации</button>
 
-    <div class="checkbox-area">
-        <input type="checkbox" id="agreeCheck">
-        <label for="agreeCheck">Я прочитал правила и беру ответственность на себя</label>
-    </div>
+<div class="checkbox-area">
+<input type="checkbox" id="agreeCheck">
+<label>Я прочитал правила и согласен</label>
 </div>
 
-<footer>
-© 2026 Paradigm 10X
-</footer>
+<div class="wallets">
+<h3>Скачать кошелек</h3>
+<a href="https://metamask.io/download/" target="_blank">MetaMask</a>
+<a href="https://trustwallet.com/download" target="_blank">Trust Wallet</a>
+<a href="https://safepal.com/download" target="_blank">SafePal</a>
+</div>
+
+</div>
+
+<footer>© 2026 Paradigm 10X</footer>
+
+<!-- Modal -->
+<div id="modal" class="modal">
+<div class="modal-content">
+<span class="close" onclick="closeModal()">&times;</span>
+<div id="modalText"></div>
+</div>
+</div>
 
 <script>
 
 function openVideo(){
-    window.open("https://youtube.com/shorts/KoYDCQw07Xs?si=unJdzUVaihMif7GJ", "_blank");
+document.getElementById("modal").style.display="block";
+document.getElementById("modalText").innerHTML=
+'<iframe width="100%" height="300" src="https://www.youtube.com/embed/KoYDCQw07Xs" frameborder="0" allowfullscreen></iframe>';
+}
+
+function openDesc(type){
+let text="";
+if(type=="flash") text="🚀 Flash — Быстрый пакет на 3 уровня. Предназначен для максимально быстрого прохождения.";
+if(type=="rapid") text="💰 Rapid — Ускоренный пакет на 3 уровня с повышенным оборотом.";
+if(type=="validator") text="🛡 Validator — Основной пакет на 10 уровней со стабильной структурой.";
+if(type=="genesis") text="👑 Genesis — VIP пакет на 10 уровней с максимальным потенциалом.";
+document.getElementById("modal").style.display="block";
+document.getElementById("modalText").innerHTML=text;
+}
+
+function closeModal(){
+document.getElementById("modal").style.display="none";
 }
 
 document.getElementById("agreeCheck").addEventListener("change", function(){
-    let buttons = document.querySelectorAll(".buyBtn");
-    buttons.forEach(btn=>{
-        btn.disabled = !this.checked;
-    });
+let buttons=document.querySelectorAll(".buyBtn");
+buttons.forEach(btn=>btn.disabled=!this.checked);
 });
 
 async function connectWallet(){
-    if(typeof window.ethereum !== 'undefined'){
-        const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-        document.getElementById("walletAddress").innerText = 
-            "Кошелек: " + accounts[0];
-    } else {
-        alert("Установите MetaMask");
-    }
+if(typeof window.ethereum!=='undefined'){
+const accounts=await ethereum.request({method:'eth_requestAccounts'});
+document.getElementById("walletAddress").innerText="Кошелек: "+accounts[0];
+}else{
+alert("Установите MetaMask");
+}
+}
+
+function toggleLang(){
+alert("Мультиязык можно расширить позже — сейчас базовая версия.");
 }
 
 </script>
 
 </body>
-  </html>
+</html>
