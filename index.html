@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Paradigm 10X</title>
-<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.min.js"></script>
+<title>Spark Point</title>
 
 <style>
 body{
@@ -16,7 +15,7 @@ text-align:center;
 }
 
 header{
-padding:25px;
+padding:30px 20px;
 }
 
 .logo{
@@ -26,26 +25,18 @@ color:#FFD700;
 }
 
 .lang-switch{
-position:absolute;
-top:20px;
-right:20px;
-cursor:pointer;
-background:#FFD700;
-color:#000;
-padding:5px 10px;
-border-radius:6px;
-font-weight:bold;
+margin-top:15px;
 }
 
-.wallet-btn{
+.lang-btn{
 background:#FFD700;
 color:#000;
-padding:10px 20px;
 border:none;
-border-radius:8px;
-font-weight:bold;
+padding:8px 15px;
+margin:5px;
+border-radius:6px;
 cursor:pointer;
-margin-top:10px;
+font-weight:bold;
 }
 
 .grid{
@@ -60,37 +51,38 @@ margin:auto;
 .card{
 background:#111;
 border-radius:15px;
-padding:25px;
-box-shadow:0 0 15px rgba(255,215,0,0.2);
+padding:20px;
+box-shadow:0 0 15px rgba(255,215,0,0.3);
 }
 
 .card h2{
 color:#FFD700;
 }
 
-.price{
-font-size:26px;
+.desc{
+font-size:14px;
+color:#ccc;
+min-height:60px;
+}
+
+.level{
 margin:10px 0;
+color:#00ff99;
 }
 
 .btn{
 width:100%;
 padding:10px;
-margin-top:10px;
+margin-top:8px;
 border:none;
 border-radius:8px;
 font-weight:bold;
 cursor:pointer;
 }
 
-.btn-yellow{background:#FFD700;color:#000;}
-.btn-green{background:#00c853;color:#000;}
-.btn-red{background:#d50000;color:#fff;}
-
-.btn:disabled{
-background:#333;
-color:#777;
-cursor:not-allowed;
+.btn-yellow{
+background:#FFD700;
+color:#000;
 }
 
 .rules{
@@ -102,189 +94,177 @@ border-radius:15px;
 text-align:left;
 }
 
-.checkbox-area{
-margin-top:20px;
-padding:15px;
-border:1px solid #FFD700;
-border-radius:10px;
+.rules h3{
+color:#FFD700;
 }
 
-.video-btn{
-background:#d50000;
-color:#fff;
+.wallets{
+margin:40px auto;
+}
+
+.wallet-btn{
+background:#FFD700;
+color:#000;
 padding:12px 20px;
+margin:10px;
 border:none;
 border-radius:8px;
 font-weight:bold;
 cursor:pointer;
-margin-top:20px;
 }
 
-.wallets{
-margin-top:30px;
-}
-
-.wallets a{
-display:inline-block;
-margin:10px;
-background:#FFD700;
-color:#000;
-padding:10px 15px;
-border-radius:8px;
-text-decoration:none;
-font-weight:bold;
-}
-
-footer{
-margin:40px 0;
-color:#777;
-}
-
-/* Modal */
-.modal{
+.video-modal{
 display:none;
 position:fixed;
-z-index:10;
-left:0;top:0;
+top:0;
+left:0;
 width:100%;
 height:100%;
 background:rgba(0,0,0,0.8);
+justify-content:center;
+align-items:center;
 }
 
-.modal-content{
-background:#111;
-margin:10% auto;
-padding:20px;
-width:90%;
-max-width:500px;
-border-radius:15px;
+.video-content{
+background:#000;
+padding:10px;
+border-radius:10px;
 }
 
 .close{
-color:#FFD700;
-float:right;
-font-size:22px;
+color:#fff;
 cursor:pointer;
+font-size:20px;
+text-align:right;
+}
+
+footer{
+margin:30px 0;
+color:#777;
 }
 </style>
 </head>
-
 <body>
 
-<div class="lang-switch" onclick="toggleLang()">RU / EN</div>
-
 <header>
-<div class="logo">PARADIGM 10X</div>
-<button class="wallet-btn" onclick="connectWallet()">Подключить кошелек</button>
-<div id="walletAddress"></div>
+<div class="logo">SPARK POINT 💎</div>
+
+<div class="lang-switch">
+<button class="lang-btn" onclick="setLang('ru')">RU</button>
+<button class="lang-btn" onclick="setLang('en')">EN</button>
+</div>
 </header>
 
 <div class="grid">
 
 <div class="card">
-<h2>🚀 Flash</h2>
-<div class="price">50$</div>
-<button class="btn btn-yellow" onclick="openDesc('flash')">Посмотреть</button>
-<button class="btn btn-green buyBtn" disabled>Купить</button>
+<h2>Flash ⚡</h2>
+<div class="desc" id="flashDesc"></div>
+<div class="level">3 уровня</div>
+<button class="btn btn-yellow" onclick="openVideo()">Описание</button>
 </div>
 
 <div class="card">
-<h2>💰 Rapid</h2>
-<div class="price">100$</div>
-<button class="btn btn-yellow" onclick="openDesc('rapid')">Посмотреть</button>
-<button class="btn btn-green buyBtn" disabled>Купить</button>
+<h2>Rapid 🚀</h2>
+<div class="desc" id="rapidDesc"></div>
+<div class="level">3 уровня</div>
+<button class="btn btn-yellow" onclick="openVideo()">Описание</button>
 </div>
 
 <div class="card">
-<h2>🛡 Validator</h2>
-<div class="price">50$</div>
-<button class="btn btn-yellow" onclick="openDesc('validator')">Посмотреть</button>
-<button class="btn btn-green buyBtn" disabled>Купить</button>
+<h2>Validator 🔐</h2>
+<div class="desc" id="validatorDesc"></div>
+<div class="level">10 уровней</div>
+<button class="btn btn-yellow" onclick="openVideo()">Описание</button>
 </div>
 
 <div class="card">
-<h2>👑 Genesis</h2>
-<div class="price">100$</div>
-<button class="btn btn-yellow" onclick="openDesc('genesis')">Посмотреть</button>
-<button class="btn btn-green buyBtn" disabled>Купить</button>
+<h2>Genesis 👑</h2>
+<div class="desc" id="genesisDesc"></div>
+<div class="level">VIP 10 уровней</div>
+<button class="btn btn-yellow" onclick="openVideo()">Описание</button>
 </div>
 
 </div>
 
 <div class="rules">
-<h3>Правила участия</h3>
-<p>
-• Все процессы работают на автопилоте.<br>
-• Необходимо 2 активных участника.<br>
-• Доход зависит от активности.<br>
-• Вход добровольный.
-</p>
-
-<button class="video-btn" onclick="openVideo()">📺 Видео инструкция регистрации</button>
-
-<div class="checkbox-area">
-<input type="checkbox" id="agreeCheck">
-<label>Я прочитал правила и согласен</label>
+<h3 id="rulesTitle">ПРАВИЛА УЧАСТИЯ И ИНСТРУКЦИЯ</h3>
+<p id="rulesText"></p>
 </div>
 
 <div class="wallets">
-<h3>Скачать кошелек</h3>
-<a href="https://metamask.io/download/" target="_blank">MetaMask</a>
-<a href="https://trustwallet.com/download" target="_blank">Trust Wallet</a>
-<a href="https://safepal.com/download" target="_blank">SafePal</a>
+<h3>Установить кошелек</h3>
+<button class="wallet-btn" onclick="window.open('https://metamask.io','_blank')">MetaMask 🦊</button>
+<button class="wallet-btn" onclick="window.open('https://trustwallet.com','_blank')">Trust Wallet 🛡</button>
+<button class="wallet-btn" onclick="window.open('https://safepal.com','_blank')">SafePal 🔐</button>
 </div>
 
+<div class="video-modal" id="videoModal">
+<div class="video-content">
+<div class="close" onclick="closeVideo()">✖</div>
+<iframe width="300" height="200"
+src="https://www.youtube.com/embed/KoYDCQw07Xs"
+frameborder="0"
+allowfullscreen>
+</iframe>
+</div>
 </div>
 
-<footer>© 2026 Paradigm 10X</footer>
-
-<!-- Modal -->
-<div id="modal" class="modal">
-<div class="modal-content">
-<span class="close" onclick="closeModal()">&times;</span>
-<div id="modalText"></div>
-</div>
-</div>
+<footer>© 2026 Spark Point</footer>
 
 <script>
 
 function openVideo(){
-document.getElementById("modal").style.display="block";
-document.getElementById("modalText").innerHTML=
-'<iframe width="100%" height="300" src="https://www.youtube.com/embed/KoYDCQw07Xs" frameborder="0" allowfullscreen></iframe>';
+document.getElementById("videoModal").style.display="flex";
 }
 
-function openDesc(type){
-let text="";
-if(type=="flash") text="🚀 Flash — Быстрый пакет на 3 уровня. Предназначен для максимально быстрого прохождения.";
-if(type=="rapid") text="💰 Rapid — Ускоренный пакет на 3 уровня с повышенным оборотом.";
-if(type=="validator") text="🛡 Validator — Основной пакет на 10 уровней со стабильной структурой.";
-if(type=="genesis") text="👑 Genesis — VIP пакет на 10 уровней с максимальным потенциалом.";
-document.getElementById("modal").style.display="block";
-document.getElementById("modalText").innerHTML=text;
+function closeVideo(){
+document.getElementById("videoModal").style.display="none";
 }
 
-function closeModal(){
-document.getElementById("modal").style.display="none";
+function setLang(lang){
+
+if(lang==="ru"){
+document.getElementById("flashDesc").innerText="Быстрый пакет для прохождения 3 уровней и выхода на финальную выплату.";
+document.getElementById("rapidDesc").innerText="Ускоренная версия 3 уровней с увеличенной финальной выплатой.";
+document.getElementById("validatorDesc").innerText="Масштабный пакет 10 уровней с функцией безопасного старта.";
+document.getElementById("genesisDesc").innerText="VIP пакет 10 уровней с максимальным потенциалом структуры.";
+
+document.getElementById("rulesText").innerText=`1. Классификация пакетов
+Скоростные (Flash, Rapid): предназначены для прохождения 3 уровней. Вход включен в итоговую прибыль.
+Масштабные (Vault, Validator, Genesis): 10 уровней с безопасным стартом — после 2 приглашений вход возвращается.
+
+2. Механика
+Все процессы происходят автоматически через смарт-контракт.
+Администрация не имеет доступа к средствам.
+
+3. Disclaimer
+Это не инвестиции. Доход зависит от активности.
+Вход добровольный. Возвратов нет.`;
 }
 
-document.getElementById("agreeCheck").addEventListener("change", function(){
-let buttons=document.querySelectorAll(".buyBtn");
-buttons.forEach(btn=>btn.disabled=!this.checked);
-});
+if(lang==="en"){
+document.getElementById("flashDesc").innerText="Fast package for completing 3 levels and reaching final payout.";
+document.getElementById("rapidDesc").innerText="Accelerated 3-level package with higher final reward.";
+document.getElementById("validatorDesc").innerText="10-level scalable package with safe start feature.";
+document.getElementById("genesisDesc").innerText="VIP 10-level package with maximum structure potential.";
 
-async function connectWallet(){
-if(typeof window.ethereum!=='undefined'){
-const accounts=await ethereum.request({method:'eth_requestAccounts'});
-document.getElementById("walletAddress").innerText="Кошелек: "+accounts[0];
-}else{
-alert("Установите MetaMask");
-}
+document.getElementById("rulesText").innerText=`1. Package classification
+Speed packages (Flash, Rapid): 3 levels. Entry included in final reward.
+Scale packages (Vault, Validator, Genesis): 10 levels with safe start — entry returned after 2 referrals.
+
+2. Mechanism
+All processes are automatic via smart contract.
+Administration has no access to funds.
+
+3. Disclaimer
+Not an investment. Income depends on activity.
+Entry is voluntary. No refunds.`;
 }
 
-function toggleLang(){
-alert("Мультиязык можно расширить позже — сейчас базовая версия.");
 }
+
+setLang("ru");
 
 </script>
 
